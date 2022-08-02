@@ -2,9 +2,11 @@
 import discord
 import random
 from discord.ext import commands
+from os import environ
+from dotenv import load_dotenv
 
-
-TOKEN = 'MTAwNDA3NTE3MzUwMDE3NDQyOA.GGf6Q9.sshUmQgk5_BwNfBsjfknKOFIyINpoAprM3hHOg'
+load_dotenv()
+TOKEN = environ["TOKEN"]
 client = commands.Bot(command_prefix = '!')
 
 #initialize
