@@ -1,0 +1,2 @@
+# StupidBot
+discord bot repo
