@@ -12,12 +12,6 @@ saucelimit = 200
 reddit = praw.Reddit(client_id='USq-V1BgU2mDhE8Ladv43w', client_secret = SECRET, user_agent = 'stupid-bot', username='stupidbottyboy', password=PASSWORD)
 sources = [secretsauce, "shitposting"]
 
-<<<<<<< HEAD
-def isValidImage(submission):
-    return submission.is_se
-
-=======
->>>>>>> 5102bd1b459ca5b1b1156d655a86ab0e2cb948df
 def getImageLink():
     posts = list((reddit.subreddit(random.choice(sources))).hot(limit=saucelimit))
     # this is a first draft, we will need to fix this
