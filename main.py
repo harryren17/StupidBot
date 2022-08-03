@@ -25,7 +25,7 @@ async def test(ctx):
     await ctx.send("akl;sujhfglaiserughl;asirugh")
 
 @client.command()
-async def image(ctx):
+async def shitpost(ctx):
     await ctx.send(helper.getImageLink())
     await ctx.send(helper.getRandomCaption()) 
 
@@ -98,6 +98,9 @@ async def on_message(message):
 
     #only testing channel
     #if message.channel.name == 'testing':
+    if random.random() > 0.99:
+        await message.channel.send(helper.getImageLink())
+        await message.channel.send(helper.getRandomCaption()) 
     if user_message == 'cum':
         await message.channel.send('i love it')
         return
