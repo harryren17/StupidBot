@@ -25,7 +25,7 @@ async def test(ctx):
     await ctx.send("akl;sujhfglaiserughl;asirugh")
 
 @client.command()
-async def shitpost(ctx):
+async def post(ctx):
     await ctx.send(helper.getImageLink())
     await ctx.send(helper.getRandomCaption()) 
 
