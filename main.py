@@ -1,9 +1,12 @@
-#basic bot setup/ starter code
+#basic bot setup/ starter code 
 import discord
 import random
 from discord.ext import commands
+from discord import FFmpegPCMAudio
 from os import environ
 from dotenv import load_dotenv
+import youtube_dl
+import os
 
 load_dotenv()
 TOKEN = environ["TOKEN"]
@@ -38,6 +41,69 @@ async def leave(ctx):
         await ctx.send("im out bitch")
     else:
         await ctx.send("i aint here hoe")
+
+#play VC
+@client.command(pass_context = True)
+async def play1(ctx, url:str):
+    #if user in VC, join same VC
+    if(ctx.author.voice):
+        channel = ctx.message.author.voice.channel
+        voice = await channel.connect()
+
+        #download the vid
+        ydl_opts = {
+        'format':'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec':'mp3',
+            'preferredquality': '192',
+        }]
+        }
+        
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+        for file in os.listdir("./"):
+            if file.endswith(".mp3"):
+                os.rename(file, "song.mp3")
+
+        source = FFmpegPCMAudio("song.mp3")
+        player = voice.play(source)
+
+    else:
+        await ctx.send("join a vc dumb bitch, idk where to go")
+
+#play VC fixed
+@client.command(pass_context = True)
+async def play(ctx, url:str):
+    song_exist = os.path.isfile("song.mp3")
+    try:
+        if song_exist:
+            os.remove("song.mp3")
+    except PermissionError:
+        await ctx.send("error 1")
+        return
+    voiceChannel = discord.utils.get(ctx.guild.voice_channels, name="General")
+    await voiceChannel.connect()
+    voice = discord.utils.get(client.voice_clients, guild =ctx.guild)
+
+        #download the vid
+    ydl_opts = {
+        'format':'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec':'mp3',
+            'preferredquality': '192',
+        }]
+    }
+
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
+    for file in os.listdir("./"):
+        if file.endswith(".mp3"):
+            os.rename(file, "song.mp3")
+    voice.play(discord.FFmpegPCMAudio("song.mp3"))
+        
+
 
 #message replys (no command)
 @client.event
