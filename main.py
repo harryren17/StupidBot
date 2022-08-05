@@ -42,9 +42,10 @@ async def join(ctx):
 #leave VC
 @client.command(pass_context = True)
 async def leave(ctx):
+    voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
     #if bot in VC already, disconnect
-    if(ctx.voice_client):
-        await ctx.guild.voice_client.disconnect()
+    if(voice.is_connected()):
+        await voice.disconnect()
         await ctx.send("im out bitch")
     else:
         await ctx.send("i aint here hoe")
@@ -81,6 +82,25 @@ async def play(ctx, url:str):
             os.rename(file, "song.mp3")
     voice.play(discord.FFmpegPCMAudio("song.mp3"))
         
+@client.command(pass_context = True)
+async def boogie(ctx):
+    if(ctx.author.voice):
+        channel = ctx.message.author.voice.channel
+        await channel.connect()
+    else:
+        await ctx.send("join a vc dumb bitch, idk where to go")
+    voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
+    voice.play(discord.FFmpegPCMAudio("song.mp3"))
+
+@client.command()
+async def pause(ctx):
+    voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
+    if voice.is_playing():
+        voice.pause()
+    elif voice.is_paused():
+        voice.resume()
+    else:
+        ctx.send("broke lol")
 
 
 #message replys (no command)
@@ -103,7 +123,7 @@ async def on_message(message):
         await message.channel.send(helper.getRandomCaption()) 
     elif user_message == 'balls':
         await message.channel.send('i lick it')
-        return
+        return 
     await client.process_commands(message)
 
 
